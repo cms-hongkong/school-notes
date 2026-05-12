@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>卡雅認音大挑戰 - 教學修正版</title>
+    <title>卡雅認音大挑戰 - 低音優化版</title>
     <style>
         :root {
             --forest-green: #1B4332;
@@ -188,8 +188,8 @@
             <div class="art-title main-menu-title">
                 <span>卡</span><span>雅</span><span>認</span><span>音</span><span>大</span><span>挑</span><span>戰</span>
             </div>
-            <button class="btn-forest" style="background: #2D6A4F;" onclick="selectMode('treble')">預覽：𝄞 高音譜號</button>
-            <button class="btn-forest" style="background: #40916C;" onclick="selectMode('bass')">預覽：𝄢 低音譜號</button>
+            <button class="btn-forest" style="background: #2D6A4F;" onclick="selectMode('treble')">𝄞 高音譜號模式</button>
+            <button class="btn-forest" style="background: #40916C;" onclick="selectMode('bass')">𝄢 低音譜號模式</button>
             <button class="btn-forest" style="background: var(--wood-brown); margin-top: 30px;" onclick="showRank()">🏆 排行榜紀錄</button>
         </div>
 
@@ -231,7 +231,7 @@
     let curLv = 1;
     let score = 0;
     let targetNote = "";
-    let lastNote = ""; 
+    let lastNote = "";
     let questionsLeft = 10;
     let startTime, isAnswering = false;
     let s = 0; 
@@ -259,13 +259,12 @@
         },
         bass: {
             clef: "𝄢",
-            // 修改 1：低音譜號題目按線條數量分級
             levels: [
-                { notes: ["F2", "G2", "A2"] }, // 1條線相關 (G2是線)
-                { notes: ["F2", "G2", "A2", "B2", "C3"] }, // 2條線相關 (B2是線)
-                { notes: ["F2", "G2", "A2", "B2", "C3", "D3", "E3"] }, // 3條線
-                { notes: ["F2", "G2", "A2", "B2", "C3", "D3", "E3", "F3", "G3"] }, // 4條線
-                { notes: ["E2", "F2", "G2", "A2", "B2", "C3", "D3", "E3", "F3", "G3", "A3", "B3", "C4"] } // 5條線+加線
+                { notes: ["E2", "F2", "G2"] }, // Level 1: 1條線相關 (下加1線E, 線下F, 第一線G)
+                { notes: ["E2", "F2", "G2", "A2", "B2"] }, // Level 2: 2條線相關
+                { notes: ["E2", "F2", "G2", "A2", "B2", "C3", "D3"] }, // Level 3: 3條線相關
+                { notes: ["E2", "F2", "G2", "A2", "B2", "C3", "D3", "E3", "F3"] }, // Level 4: 4條線相關
+                { notes: ["E2", "F2", "G2", "A2", "B2", "C3", "D3", "E3", "F3", "G3", "A3", "B3", "C4"] } // Level 5: 5條線與上加一線
             ],
             steps: { 
                 "E2": -2, "F2": -1, "G2": 0, "A2": 1, "B2": 2, "C3": 3, "D3": 4, 
@@ -291,6 +290,7 @@
         const staffTotalHeight = 4 * s;
         const staffTopY = staffMidY - staffTotalHeight / 2;
         
+        // 繪製五線譜 (動態行數)
         for (let i = 0; i < curLv; i++) {
             const y = staffTopY + (4 - i) * s; 
             ctx.strokeStyle = colors[i] || "#333";
@@ -301,15 +301,16 @@
             ctx.stroke();
         }
 
+        // 修改 2：譜號位置調整 (低音譜號再下移一格)
         ctx.fillStyle = "#111";
         ctx.font = `${s * 6}px serif`;
         ctx.textAlign = "left";
         ctx.textBaseline = "middle";
-        
-        // 修改 2：低音譜號位置再下移一格 (從 +2 改為 +3)
-        const clefY = currentMode === 'treble' ? staffTopY + 2 * s + (s * 0.5) : staffTopY + 3 * s;
+        // treble 為原本位置，bass 則從 +2s 變為 +3s
+        const clefY = currentMode === 'treble' ? staffTopY + 2.5 * s : staffTopY + 3 * s;
         ctx.fillText(modeConf.clef, canvas.width * 0.12, clefY);
 
+        // 繪製題目音符
         if (targetNote) {
             const steps = modeConf.steps[targetNote];
             const y = staffTopY + 4 * s - (steps * (s / 2));
@@ -349,7 +350,7 @@
 
     function startGame(lv) {
         curLv = lv; score = 0; questionsLeft = 10;
-        lastNote = ""; 
+        lastNote = "";
         startTime = new Date();
         document.getElementById('overlay').style.display = 'none';
         document.getElementById('stats-bar').style.visibility = 'visible';
