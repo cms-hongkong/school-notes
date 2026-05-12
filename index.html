@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>卡雅認音大挑戰 - 進階修正版</title>
+    <title>卡雅認音大挑戰 - 教學修正版</title>
     <style>
         :root {
             --forest-green: #1B4332;
@@ -188,8 +188,8 @@
             <div class="art-title main-menu-title">
                 <span>卡</span><span>雅</span><span>認</span><span>音</span><span>大</span><span>挑</span><span>戰</span>
             </div>
-            <button class="btn-forest" style="background: #2D6A4F;" onclick="selectMode('treble')">𝄞 高音譜號模式</button>
-            <button class="btn-forest" style="background: #40916C;" onclick="selectMode('bass')">𝄢 低音譜號模式</button>
+            <button class="btn-forest" style="background: #2D6A4F;" onclick="selectMode('treble')">預覽：𝄞 高音譜號</button>
+            <button class="btn-forest" style="background: #40916C;" onclick="selectMode('bass')">預覽：𝄢 低音譜號</button>
             <button class="btn-forest" style="background: var(--wood-brown); margin-top: 30px;" onclick="showRank()">🏆 排行榜紀錄</button>
         </div>
 
@@ -231,7 +231,7 @@
     let curLv = 1;
     let score = 0;
     let targetNote = "";
-    let lastNote = ""; // 用於防止連續重複答案
+    let lastNote = ""; 
     let questionsLeft = 10;
     let startTime, isAnswering = false;
     let s = 0; 
@@ -259,14 +259,14 @@
         },
         bass: {
             clef: "𝄢",
+            // 修改 1：低音譜號題目按線條數量分級
             levels: [
-                { notes: ["G2", "A2", "B2"] },
-                { notes: ["G2", "A2", "B2", "C3", "D3"] },
-                { notes: ["G2", "A2", "B2", "C3", "D3", "E3", "F3"] },
-                { notes: ["G2", "A2", "B2", "C3", "D3", "E3", "F3", "G3", "A3"] },
-                { notes: ["E2", "F2", "G2", "A2", "B2", "C3", "D3", "E3", "F3", "G3", "A3", "B3", "C4"] }
+                { notes: ["F2", "G2", "A2"] }, // 1條線相關 (G2是線)
+                { notes: ["F2", "G2", "A2", "B2", "C3"] }, // 2條線相關 (B2是線)
+                { notes: ["F2", "G2", "A2", "B2", "C3", "D3", "E3"] }, // 3條線
+                { notes: ["F2", "G2", "A2", "B2", "C3", "D3", "E3", "F3", "G3"] }, // 4條線
+                { notes: ["E2", "F2", "G2", "A2", "B2", "C3", "D3", "E3", "F3", "G3", "A3", "B3", "C4"] } // 5條線+加線
             ],
-            // 修正映射：G2 是底線 (0), C4 是上加一線 (10), E2 是下加一線 (-2)
             steps: { 
                 "E2": -2, "F2": -1, "G2": 0, "A2": 1, "B2": 2, "C3": 3, "D3": 4, 
                 "E3": 5, "F3": 6, "G3": 7, "A3": 8, "B3": 9, "C4": 10 
@@ -291,7 +291,6 @@
         const staffTotalHeight = 4 * s;
         const staffTopY = staffMidY - staffTotalHeight / 2;
         
-        // 修改 2：根據等級顯示線條數量 (從底部往上畫)
         for (let i = 0; i < curLv; i++) {
             const y = staffTopY + (4 - i) * s; 
             ctx.strokeStyle = colors[i] || "#333";
@@ -302,17 +301,15 @@
             ctx.stroke();
         }
 
-        // 修改 1：譜號位置調整 (低音譜號向下移一個間距)
         ctx.fillStyle = "#111";
         ctx.font = `${s * 6}px serif`;
         ctx.textAlign = "left";
         ctx.textBaseline = "middle";
-        // 原本 treble 是 staffTopY + 2.5s, bass 是 staffTopY + 1s. 
-        // 現在 bass 改為 staffTopY + 2s (下移一個 s)
-        const clefY = currentMode === 'treble' ? staffTopY + 2 * s + (s * 0.5) : staffTopY + 2 * s;
+        
+        // 修改 2：低音譜號位置再下移一格 (從 +2 改為 +3)
+        const clefY = currentMode === 'treble' ? staffTopY + 2 * s + (s * 0.5) : staffTopY + 3 * s;
         ctx.fillText(modeConf.clef, canvas.width * 0.12, clefY);
 
-        // 繪製題目音符
         if (targetNote) {
             const steps = modeConf.steps[targetNote];
             const y = staffTopY + 4 * s - (steps * (s / 2));
@@ -323,7 +320,6 @@
             ctx.ellipse(x, y, s * 0.6, s * 0.45, -Math.PI / 8, 0, 2 * Math.PI);
             ctx.fill();
             
-            // 繪製加線 (上加線或下加線)
             if (steps <= -2 || steps >= 10) {
                 ctx.strokeStyle = "#000";
                 ctx.lineWidth = Math.max(6, s / 15);
@@ -353,7 +349,7 @@
 
     function startGame(lv) {
         curLv = lv; score = 0; questionsLeft = 10;
-        lastNote = ""; // 重置紀錄
+        lastNote = ""; 
         startTime = new Date();
         document.getElementById('overlay').style.display = 'none';
         document.getElementById('stats-bar').style.visibility = 'visible';
@@ -365,7 +361,6 @@
         isAnswering = false;
         const pool = config[currentMode].levels[curLv-1].notes;
         
-        // 修改 4：防止連續出現相同答案
         let newNote;
         do {
             newNote = pool[Math.floor(Math.random() * pool.length)];
