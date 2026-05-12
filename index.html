@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>卡雅認音大挑戰 - 4K 白板專業版</title>
+    <title>卡雅認音大挑戰 - 4K 修正版</title>
     <style>
         :root {
             --forest-green: #1B4332;
@@ -23,43 +23,40 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 40px; /* 增加間距避免邊緣觸碰 */
+            padding: 20px;
             overflow: hidden;
         }
 
         #game-container {
             background: rgba(255, 255, 255, 0.98);
-            padding: 40px;
-            border-radius: 60px;
+            padding: 30px;
+            border-radius: 50px;
             box-shadow: 0 20px 0px var(--wood-brown), 0 40px 80px rgba(0,0,0,0.2);
-            width: 95vw;
-            max-width: 3200px; /* 限制最大寬度以維持比例 */
-            height: 90vh;
+            width: 96vw;
+            height: 94vh;
             position: relative;
             text-align: center;
             border: 10px solid var(--sand-light);
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
         }
 
-        /* 標題樣式強化 */
         .art-title {
             font-weight: 900;
             display: flex;
             justify-content: center;
-            gap: 20px;
-            filter: drop-shadow(4px 4px 0px white);
+            gap: 15px;
         }
 
-        .in-game-title { font-size: 5rem; margin-bottom: 10px; }
-        .main-menu-title { font-size: 10rem; margin-bottom: 60px; }
+        .in-game-title { font-size: 4rem; margin-bottom: 10px; }
+        .main-menu-title { font-size: 8rem; margin-bottom: 40px; }
 
         .art-title span {
             display: inline-block;
-            text-shadow: 6px 6px 0px var(--wood-brown);
+            text-shadow: 4px 4px 0px var(--wood-brown);
         }
 
+        /* 顏色標題保持不變 */
         .art-title span:nth-child(1) { color: #FF6B6B; transform: rotate(-7deg); }
         .art-title span:nth-child(2) { color: #FF9F45; transform: rotate(5deg); }
         .art-title span:nth-child(3) { color: #6BCB77; transform: rotate(-4deg); }
@@ -71,132 +68,102 @@
         .stats-bar {
             display: flex;
             justify-content: center;
-            gap: 40px;
-            margin-bottom: 20px;
+            gap: 30px;
+            margin-bottom: 15px;
             visibility: hidden;
         }
 
         .badge {
             background: var(--sand-light);
-            padding: 15px 40px;
-            border-radius: 30px;
-            font-size: 2.5rem;
+            padding: 10px 30px;
+            border-radius: 25px;
+            font-size: 2rem;
             font-weight: bold;
             border: 4px solid var(--wood-brown);
         }
 
         #canvas-wrapper {
             background: white;
-            border-radius: 40px;
-            border: 8px solid var(--leaf-green);
-            margin: 20px auto;
+            border-radius: 30px;
+            border: 6px solid var(--leaf-green);
+            margin: 10px auto;
             width: 100%;
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-grow: 1; /* 讓 Canvas 佔據最大空間 */
+            position: relative;
             overflow: hidden;
         }
 
         canvas {
             width: 100%;
-            height: auto;
-            max-height: 100%;
+            height: 100%;
             display: block;
         }
 
-        /* 答題按鈕區域優化為橫向大空間 */
         #answer-area {
             display: flex;
             justify-content: center;
-            gap: 50px;
-            margin: 30px 0;
-            min-height: 350px;
+            gap: 40px;
+            margin-top: 20px;
+            min-height: 280px;
         }
 
         .animal-btn {
             background: #FFF;
             border: 6px solid var(--wood-brown);
-            border-radius: 40px;
-            padding: 20px;
-            width: 400px;
+            border-radius: 35px;
+            padding: 15px;
+            width: 320px;
             cursor: pointer;
-            box-shadow: 0 15px 0 var(--wood-brown);
-            transition: all 0.1s;
+            box-shadow: 0 12px 0 var(--wood-brown);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
         }
 
-        .animal-btn:active { transform: translateY(8px); box-shadow: 0 5px 0 var(--wood-brown); }
-
         .img-container { 
             width: 100%; 
-            height: 180px; 
+            height: 140px; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            font-size: 8rem; 
+            font-size: 7rem; 
         }
         .animal-img { width: 100%; height: 100%; object-fit: contain; }
-        .letter-name { font-size: 5rem; font-weight: bold; color: var(--wood-brown); margin-top: 10px; }
+        .letter-name { font-size: 4rem; font-weight: bold; color: var(--wood-brown); }
 
         #overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(255, 255, 255, 0.98);
-            border-radius: 50px;
+            border-radius: 40px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 100;
-            padding: 60px;
+            padding: 40px;
         }
 
         .btn-forest {
             font-family: var(--text-serif);
             background: var(--forest-green);
             color: white;
-            padding: 30px 60px;
-            border-radius: 100px;
-            font-size: 3rem;
+            padding: 25px 50px;
+            border-radius: 80px;
+            font-size: 2.5rem;
             border: none;
             cursor: pointer;
-            box-shadow: 0 12px 0 var(--wood-brown);
+            box-shadow: 0 10px 0 var(--wood-brown);
             font-weight: bold;
-            margin: 20px;
-            min-width: 600px;
+            margin: 15px;
+            min-width: 500px;
         }
 
-        .rank-table-container {
-            width: 90%;
-            max-height: 50vh;
-            overflow-y: auto;
-            background: white;
-            border-radius: 30px;
-            border: 4px solid var(--leaf-green);
-            margin: 30px 0;
-        }
-
-        .rank-table { width: 100%; border-collapse: collapse; font-size: 2rem; }
-        .rank-table th { background: var(--leaf-green); color: white; padding: 25px; position: sticky; top: 0; }
-        .rank-table td { padding: 20px; border-bottom: 2px solid #ddd; text-align: center; }
-
-        #playerNameInput {
-            padding: 30px;
-            border-radius: 50px;
-            border: 4px solid var(--leaf-green);
-            margin-bottom: 30px;
-            width: 800px;
-            font-size: 2.5rem;
-            text-align: center;
-            outline: none;
-        }
-
-        @keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-15px);} 75% {transform: translateX(15px);} }
-        .shake-btn { animation: shake 0.3s; }
+        /* 排行榜字體加大 */
+        .rank-table { width: 100%; border-collapse: collapse; font-size: 1.8rem; }
+        .rank-table th { background: var(--leaf-green); color: white; padding: 20px; }
+        .rank-table td { padding: 15px; border-bottom: 1px solid #ddd; text-align: center; }
     </style>
 </head>
 <body>
@@ -213,7 +180,7 @@
     </div>
 
     <div id="canvas-wrapper">
-        <canvas id="gameCanvas" width="2000" height="900"></canvas>
+        <canvas id="gameCanvas"></canvas>
     </div>
     
     <div id="answer-area"></div>
@@ -223,38 +190,36 @@
             <div class="art-title main-menu-title">
                 <span>卡</span><span>雅</span><span>認</span><span>音</span><span>大</span><span>挑</span><span>戰</span>
             </div>
-            <p style="color: var(--wood-brown); font-size: 3rem; font-weight: bold; margin-bottom: 40px;">請選擇譜號模式</p>
             <button class="btn-forest" style="background: #2D6A4F;" onclick="selectMode('treble')">𝄞 高音譜號模式</button>
             <button class="btn-forest" style="background: #40916C;" onclick="selectMode('bass')">𝄢 低音譜號模式</button>
-            <button class="btn-forest" style="background: var(--wood-brown); margin-top: 40px;" onclick="showRank()">🏆 排行榜紀錄</button>
+            <button class="btn-forest" style="background: var(--wood-brown); margin-top: 30px;" onclick="showRank()">🏆 排行榜紀錄</button>
         </div>
 
         <div id="level-view" style="display: none; flex-direction: column; align-items: center; width: 100%;">
-            <h2 id="level-title" style="font-size: 5rem; margin-bottom: 40px;">選擇難度等級</h2>
+            <h2 style="font-size: 4rem; margin-bottom: 30px;">選擇難度等級</h2>
             <div id="level-buttons" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;"></div>
-            <button class="btn-forest" style="background: #999; margin-top: 50px;" onclick="goBackToMode()">返回主選單</button>
+            <button class="btn-forest" style="background: #999; margin-top: 40px;" onclick="goBackToMode()">返回主選單</button>
         </div>
 
-        <div id="result-view" style="display: none; width: 100%; text-align: center;">
-            <h2 style="font-size: 6rem; color: var(--forest-green); margin-bottom: 20px;">太棒了！完成挑戰！</h2>
-            <p id="result-text" style="font-size: 4rem; margin: 10px;"></p>
-            <p id="time-text" style="color: var(--wood-brown); font-size: 3rem; margin-bottom: 40px;"></p>
-            <input type="text" id="playerNameInput" placeholder="點擊輸入名字..." maxlength="10">
-            <div style="display:flex; justify-content:center; gap:30px;">
-                <button class="btn-forest" style="min-width:400px;" onclick="submitAndRestart()">再玩一次</button>
-                <button class="btn-forest" style="min-width:400px; background: var(--leaf-green); color: var(--forest-green);" onclick="submitAndGoHome()">回到首頁</button>
+        <div id="result-view" style="display: none; width: 100%; text-align: center; flex-direction: column; align-items: center;">
+            <h2 style="font-size: 5rem; color: var(--forest-green);">完成挑戰！</h2>
+            <p id="result-text" style="font-size: 3rem;"></p>
+            <input type="text" id="playerNameInput" placeholder="輸入名字" maxlength="10" style="padding: 20px; border-radius: 40px; font-size: 2rem; width: 600px; text-align: center; margin-bottom: 30px;">
+            <div style="display: flex; gap: 20px;">
+                <button class="btn-forest" style="min-width: 300px;" onclick="submitAndRestart()">再玩一次</button>
+                <button class="btn-forest" style="min-width: 300px; background: var(--leaf-green);" onclick="submitAndGoHome()">回首頁</button>
             </div>
         </div>
 
         <div id="rank-view" style="display: none; width: 100%; flex-direction: column; align-items: center;">
-            <h2 style="font-size: 5rem; margin: 0;">🏆 高手排行榜</h2>
-            <div class="rank-table-container">
+            <h2 style="font-size: 4rem;">🏆 排行榜</h2>
+            <div style="width: 90%; background: white; border-radius: 20px; overflow: auto; margin-bottom: 20px;">
                 <table class="rank-table">
-                    <thead><tr><th>排名</th><th>名稱</th><th>譜</th><th>LV</th><th>得分</th><th>秒數</th></tr></thead>
+                    <thead><tr><th>排名</th><th>名稱</th><th>模式</th><th>得分</th><th>時間</th></tr></thead>
                     <tbody id="rank-body"></tbody>
                 </table>
             </div>
-            <button class="btn-forest" onclick="goBackToMode()">返回主選單</button>
+            <button class="btn-forest" onclick="goBackToMode()">返回</button>
         </div>
     </div>
 </div>
@@ -262,24 +227,33 @@
 <script>
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
+    const wrapper = document.getElementById('canvas-wrapper');
     
     let currentMode = 'treble';
     let curLv = 1;
     let score = 0;
     let targetNote = "";
-    let lastTargetNote = "";
     let questionsLeft = 10;
-    let startTime, endTime;
-    let isAnswering = false;
+    let startTime, isAnswering = false;
 
-    // 針對大螢幕調整比例
-    const s = 140; 
+    // 動態計算間距：確保在不同螢幕比例下音符都不會變形
+    let s = 0; 
+
+    function resizeCanvas() {
+        // 將 Canvas 繪圖解析度設為實際顯示的大小，避免拉伸
+        canvas.width = wrapper.clientWidth;
+        canvas.height = wrapper.clientHeight;
+        // 根據高度動態計算五線譜間距，s 為高度的 1/8 到 1/10 之間最適中
+        s = canvas.height / 8;
+        drawScene();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
 
     const config = {
         treble: {
             clef: "𝄞",
-            symbolOffset: 110,
-            fontSizeMult: 8,
+            symbolOffset: 0.8, // 相對於 s 的偏移
             levels: [
                 { notes: ["C4", "D4", "E4"] },
                 { notes: ["C4", "D4", "E4", "F4", "G4"] },
@@ -291,8 +265,7 @@
         },
         bass: {
             clef: "𝄢",
-            symbolOffset: 140,
-            fontSizeMult: 5.8,
+            symbolOffset: 1.2,
             levels: [
                 { notes: ["C4", "B3", "A3"] },
                 { notes: ["C4", "B3", "A3", "G3", "F3"] },
@@ -311,6 +284,60 @@
         'B': { img: 'bear-h.PNG', emoji: '🐻' }
     };
 
+    function drawScene() {
+        if (!s) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const modeConf = config[currentMode];
+        
+        // 譜線顏色
+        const colors = ["#FF0000", "#FFA500", "#FFD700", "#008000", "#800080"];
+        // 固定五線譜在畫面的垂直中央區域
+        const staffMidY = canvas.height / 2;
+        const staffTotalHeight = 4 * s;
+        const staffTopY = staffMidY - staffTotalHeight / 2;
+        
+        // 繪製五線譜 (加粗線條)
+        for (let i = 0; i < 5; i++) {
+            const y = staffTopY + (4 - i) * s; 
+            ctx.strokeStyle = colors[i] || "#333";
+            ctx.lineWidth = Math.max(6, s / 15);
+            ctx.beginPath();
+            ctx.moveTo(canvas.width * 0.1, y);
+            ctx.lineTo(canvas.width * 0.9, y);
+            ctx.stroke();
+        }
+
+        // 譜號 (根據 s 縮放)
+        ctx.fillStyle = "#111";
+        ctx.font = `${s * 6}px serif`;
+        ctx.textAlign = "left";
+        ctx.textBaseline = "middle";
+        const clefY = currentMode === 'treble' ? staffTopY + 2 * s + (s * 0.5) : staffTopY + s;
+        ctx.fillText(modeConf.clef, canvas.width * 0.12, clefY);
+
+        // 繪製題目音符
+        if (targetNote) {
+            const steps = modeConf.steps[targetNote];
+            const y = staffTopY + 4 * s - (steps * (s / 2));
+            const x = canvas.width / 2;
+            
+            // 音符橢圓 (按 s 比例繪製)
+            ctx.fillStyle = "black";
+            ctx.beginPath();
+            ctx.ellipse(x, y, s * 0.6, s * 0.45, -Math.PI / 8, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // 繪製加線
+            if (steps <= -2 || steps >= 10) {
+                ctx.strokeStyle = "#000";
+                ctx.lineWidth = Math.max(6, s / 15);
+                ctx.beginPath();
+                ctx.moveTo(x - s, y); ctx.lineTo(x + s, y);
+                ctx.stroke();
+            }
+        }
+    }
+
     function selectMode(mode) {
         currentMode = mode;
         document.getElementById('mode-view').style.display = 'none';
@@ -320,12 +347,12 @@
         for(let i=1; i<=5; i++) {
             const btn = document.createElement('button');
             btn.className = 'btn-forest';
-            btn.style.minWidth = "300px";
+            btn.style.minWidth = "250px";
             btn.innerText = "LV " + i;
             btn.onclick = () => startGame(i);
             btnContainer.appendChild(btn);
         }
-        drawScene();
+        resizeCanvas();
     }
 
     function startGame(lv) {
@@ -337,51 +364,10 @@
         nextQuestion();
     }
 
-    function drawScene() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        const modeConf = config[currentMode];
-        const colors = ["#FF0000", "#FFA500", "#FFD700", "#008000", "#800080"];
-        const staffStartY = currentMode === 'treble' ? canvas.height/2 + 1.5*s : canvas.height/2 - 2.5*s;
-        
-        // 繪製五線譜 (加粗)
-        for (let i = 0; i < 5; i++) {
-            const y = currentMode === 'treble' ? staffStartY - (i * s) : staffStartY + (i * s);
-            ctx.strokeStyle = colors[i] || "#333";
-            ctx.lineWidth = 10; // 白板需加粗
-            ctx.beginPath();
-            ctx.moveTo(150, y); ctx.lineTo(1850, y);
-            ctx.stroke();
-        }
-
-        ctx.fillStyle = "#111";
-        ctx.font = `${s * modeConf.fontSizeMult}px serif`;
-        const clefY = currentMode === 'treble' ? staffStartY + modeConf.symbolOffset : staffStartY + 3*s + modeConf.symbolOffset;
-        ctx.fillText(modeConf.clef, 180, clefY);
-
-        if (targetNote) {
-            const steps = modeConf.steps[targetNote];
-            const y = currentMode === 'treble' ? staffStartY - (steps * (s/2)) : staffStartY + (steps * (s/2));
-            const x = canvas.width / 2 + 100;
-            
-            // 繪製音符
-            ctx.fillStyle = "black";
-            ctx.beginPath();
-            ctx.ellipse(x, y, s * 0.7, s * 0.5, -Math.PI / 8, 0, 2 * Math.PI);
-            ctx.fill();
-            
-            // 繪製加線 (上加線或下加線)
-            if (steps <= -2 || steps >= 10) {
-                ctx.strokeStyle = "#000"; ctx.lineWidth = 10;
-                ctx.beginPath(); ctx.moveTo(x - s, y); ctx.lineTo(x + s, y); ctx.stroke();
-            }
-        }
-    }
-
     function nextQuestion() {
         isAnswering = false;
         const pool = config[currentMode].levels[curLv-1].notes;
-        do { targetNote = pool[Math.floor(Math.random() * pool.length)]; } while (targetNote === lastTargetNote && pool.length > 1);
-        lastTargetNote = targetNote;
+        targetNote = pool[Math.floor(Math.random() * pool.length)];
         document.getElementById('count-display').innerText = `${11 - questionsLeft} / 10`;
         document.getElementById('score-val').innerText = score;
         document.getElementById('lv-display').innerText = `LV ${curLv}`;
@@ -409,10 +395,8 @@
                 isAnswering = true;
                 if (letter === correctLetter) {
                     score++; btn.style.background = "#90EE90";
-                    btn.querySelector('.letter-name').innerText = "✔️ " + letter;
                 } else {
-                    btn.style.background = "#FFB3B3"; btn.classList.add('shake-btn');
-                    btn.querySelector('.letter-name').innerText = "❌ " + letter;
+                    btn.style.background = "#FFB3B3";
                 }
                 setTimeout(() => { questionsLeft--; if (questionsLeft > 0) nextQuestion(); else showResult(); }, 600);
             };
@@ -421,34 +405,27 @@
     }
 
     function showResult() {
-        endTime = new Date();
-        const duration = Math.floor((endTime - startTime) / 1000);
+        const duration = Math.floor((new Date() - startTime) / 1000);
         document.getElementById('overlay').style.display = 'flex';
-        document.getElementById('mode-view').style.display = 'none';
         document.getElementById('level-view').style.display = 'none';
         document.getElementById('result-view').style.display = 'flex';
-        document.getElementById('result-view').style.flexDirection = 'column';
-        document.getElementById('result-view').style.alignItems = 'center';
-        document.getElementById('result-text').innerText = `得分：${score} / 10`;
-        document.getElementById('time-text').innerText = `總耗時：${duration} 秒`;
-    }
-
-    function saveRecord() {
-        const name = document.getElementById('playerNameInput').value.trim() || "匿名挑戰者";
-        const duration = Math.floor((endTime - startTime) / 1000);
-        const record = { name, mode: currentMode === 'treble' ? "高" : "低", lv: curLv, score, time: duration, date: new Date().toLocaleDateString() };
-        let history = JSON.parse(localStorage.getItem('kayaNoteRank') || "[]");
-        history.push(record);
-        localStorage.setItem('kayaNoteRank', JSON.stringify(history));
+        document.getElementById('result-text').innerText = `得分：${score} / 10 | 耗時：${duration} 秒`;
     }
 
     function submitAndRestart() { saveRecord(); startGame(curLv); }
     function submitAndGoHome() { saveRecord(); goHome(); }
 
+    function saveRecord() {
+        const name = document.getElementById('playerNameInput').value.trim() || "匿名";
+        const duration = Math.floor((new Date() - startTime) / 1000);
+        const record = { name, mode: currentMode === 'treble' ? "高" : "低", score, time: duration };
+        let history = JSON.parse(localStorage.getItem('kayaNoteRank') || "[]");
+        history.push(record);
+        localStorage.setItem('kayaNoteRank', JSON.stringify(history));
+    }
+
     function goHome() {
-        document.getElementById('playerNameInput').value = "";
         document.getElementById('result-view').style.display = 'none';
-        document.getElementById('overlay').style.display = 'flex';
         document.getElementById('mode-view').style.display = 'flex';
         document.getElementById('stats-bar').style.visibility = 'hidden';
         document.getElementById('game-header-title').style.visibility = 'hidden';
@@ -459,8 +436,6 @@
         document.getElementById('level-view').style.display = 'none';
         document.getElementById('rank-view').style.display = 'none';
         document.getElementById('mode-view').style.display = 'flex';
-        document.getElementById('stats-bar').style.visibility = 'hidden';
-        document.getElementById('game-header-title').style.visibility = 'hidden';
         targetNote = ""; drawScene();
     }
 
@@ -469,12 +444,11 @@
         document.getElementById('rank-view').style.display = 'flex';
         let data = JSON.parse(localStorage.getItem('kayaNoteRank') || "[]");
         data.sort((a, b) => b.score - a.score || a.time - b.time);
-        const body = document.getElementById('rank-body');
-        body.innerHTML = data.slice(0, 15).map((d, i) => `<tr><td>${i+1}</td><td>${d.name}</td><td>${d.mode}</td><td>${d.lv}</td><td>${d.score}</td><td>${d.time}s</td></tr>`).join('') || '<tr><td colspan="6">暫時未有紀錄</td></tr>';
+        document.getElementById('rank-body').innerHTML = data.slice(0, 10).map((d, i) => `<tr><td>${i+1}</td><td>${d.name}</td><td>${d.mode}</td><td>${d.score}</td><td>${d.time}s</td></tr>`).join('') || '<tr><td colspan="5">尚未有紀錄</td></tr>';
     }
 
-    window.onload = () => drawScene();
-    window.onresize = () => drawScene();
+    // 初始化
+    window.onload = resizeCanvas;
 </script>
 </body>
 </html>
