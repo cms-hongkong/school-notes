@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>卡雅認音大挑戰 - 精簡版</title>
+    <title>卡雅認音大挑戰</title>
     <style>
         :root {
             --forest-green: #1B4332;
@@ -81,7 +81,6 @@
             border: 3px solid var(--wood-brown);
         }
 
-        /* 縮窄五線譜容器高度 */
         #canvas-wrapper {
             background: white;
             border-radius: 25px;
@@ -89,7 +88,7 @@
             margin: 5px auto;
             width: 100%;
             flex-grow: 0; 
-            height: 45%; /* 強制縮小譜面比例 */
+            height: 45%; 
             position: relative;
             overflow: hidden;
         }
@@ -109,7 +108,6 @@
             align-items: flex-start;
         }
 
-        /* 改為橫向並排以節省空間 */
         .animal-btn {
             background: #FFF;
             border: 5px solid var(--wood-brown);
@@ -120,7 +118,7 @@
             cursor: pointer;
             box-shadow: 0 10px 0 var(--wood-brown);
             display: flex;
-            flex-direction: row; /* 並排顯示 */
+            flex-direction: row;
             align-items: center;
             justify-content: space-between;
         }
@@ -244,7 +242,6 @@
     function resizeCanvas() {
         canvas.width = wrapper.clientWidth;
         canvas.height = wrapper.clientHeight;
-        // 修改：縮小 s (線間距)，將垂直空間縮窄 30% 以上
         s = canvas.height / 11; 
         drawScene();
     }
@@ -292,31 +289,30 @@
         const modeConf = config[currentMode];
         const colors = ["#FF0000", "#FFA500", "#FFD700", "#008000", "#800080"];
         
-        // 譜面中心定位
         const staffMidY = canvas.height / 2;
         const staffTotalHeight = 4 * s;
         const staffTopY = staffMidY - staffTotalHeight / 2;
         
-        // 繪製五線譜
         for (let i = 0; i < 5; i++) {
             const y = staffTopY + (4 - i) * s; 
             ctx.strokeStyle = colors[i] || "#333";
-            ctx.lineWidth = Math.max(4, s / 10); // 略微縮減線寬
+            ctx.lineWidth = Math.max(4, s / 10);
             ctx.beginPath();
             ctx.moveTo(canvas.width * 0.1, y);
             ctx.lineTo(canvas.width * 0.9, y);
             ctx.stroke();
         }
 
-        // 譜號位置與縮放
         ctx.fillStyle = "#111";
-        ctx.font = `${s * 7}px serif`; // 譜號稍微比線高一點
+        // 修改點：譜號字體大小倍率從 7 縮減至 4.9 (縮細 30%)
+        ctx.font = `${s * 4.9}px serif`; 
         ctx.textAlign = "left";
         ctx.textBaseline = "middle";
-        const clefY = currentMode === 'treble' ? staffTopY + 2.5 * s : staffTopY + 3 * s;
+        
+        // 微調譜號位置
+        const clefY = currentMode === 'treble' ? staffTopY + 2.3 * s : staffTopY + 2 * s;
         ctx.fillText(modeConf.clef, canvas.width * 0.12, clefY);
 
-        // 繪製題目音符
         if (targetNote) {
             const steps = modeConf.steps[targetNote];
             const y = staffTopY + 4 * s - (steps * (s / 2));
@@ -324,11 +320,9 @@
             
             ctx.fillStyle = "black";
             ctx.beginPath();
-            // 音符寬高隨 s 縮放
             ctx.ellipse(x, y, s * 0.65, s * 0.48, -Math.PI / 8, 0, 2 * Math.PI);
             ctx.fill();
             
-            // 加線 (下加線或上加線)
             if (steps <= -2 || steps >= 10) {
                 ctx.strokeStyle = "#000";
                 ctx.lineWidth = Math.max(4, s / 10);
@@ -339,7 +333,6 @@
         }
     }
 
-    // 以下功能邏輯完全不變
     function selectMode(mode) {
         currentMode = mode;
         document.getElementById('mode-view').style.display = 'none';
