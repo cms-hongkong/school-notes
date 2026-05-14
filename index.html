@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>卡雅認音大挑戰 - 低音優化版</title>
+    <title>卡雅認音大挑戰 - 精簡版</title>
     <style>
         :root {
             --forest-green: #1B4332;
@@ -23,20 +23,20 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 10px; /* 稍微減少邊距 */
+            padding: 10px;
             overflow: hidden;
         }
 
         #game-container {
             background: rgba(255, 255, 255, 0.98);
-            padding: 20px; /* 減少內邊距 */
+            padding: 15px 30px;
             border-radius: 40px;
             box-shadow: 0 15px 0px var(--wood-brown), 0 30px 60px rgba(0,0,0,0.2);
-            width: 98vw;
-            height: 95vh; 
+            width: 96vw;
+            height: 94vh;
             position: relative;
             text-align: center;
-            border: 8px solid var(--sand-light);
+            border: 10px solid var(--sand-light);
             display: flex;
             flex-direction: column;
         }
@@ -48,8 +48,8 @@
             gap: 10px;
         }
 
-        .in-game-title { font-size: 3rem; margin-bottom: 5px; } /* 縮小字體節省空間 */
-        .main-menu-title { font-size: 6rem; margin-bottom: 30px; }
+        .in-game-title { font-size: 2.8rem; margin-bottom: 5px; }
+        .main-menu-title { font-size: 7rem; margin-bottom: 30px; }
 
         .art-title span {
             display: inline-block;
@@ -68,7 +68,7 @@
             display: flex;
             justify-content: center;
             gap: 20px;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             visibility: hidden;
         }
 
@@ -76,18 +76,20 @@
             background: var(--sand-light);
             padding: 5px 20px;
             border-radius: 20px;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: bold;
             border: 3px solid var(--wood-brown);
         }
 
+        /* 縮窄五線譜容器高度 */
         #canvas-wrapper {
             background: white;
             border-radius: 25px;
             border: 5px solid var(--leaf-green);
             margin: 5px auto;
             width: 100%;
-            flex-grow: 1;
+            flex-grow: 0; 
+            height: 45%; /* 強制縮小譜面比例 */
             position: relative;
             overflow: hidden;
         }
@@ -98,29 +100,29 @@
             display: block;
         }
 
-        /* 關鍵修改：縮窄按鈕區高度 */
         #answer-area {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-top: 10px;
-            min-height: 160px; 
+            gap: 30px;
+            margin-top: 15px;
+            flex-grow: 1;
+            align-items: flex-start;
         }
 
-        /* 關鍵修改：按鈕改為 Row 橫向排列 */
+        /* 改為橫向並排以節省空間 */
         .animal-btn {
             background: #FFF;
             border: 5px solid var(--wood-brown);
-            border-radius: 25px;
-            padding: 10px 20px;
-            width: 300px;
-            height: 140px; /* 固定高度 */
+            border-radius: 30px;
+            padding: 10px 25px;
+            width: 280px;
+            height: 140px;
             cursor: pointer;
-            box-shadow: 0 8px 0 var(--wood-brown);
+            box-shadow: 0 10px 0 var(--wood-brown);
             display: flex;
-            flex-direction: row; /* 橫向排列 */
+            flex-direction: row; /* 並排顯示 */
             align-items: center;
-            justify-content: space-around;
+            justify-content: space-between;
         }
 
         .img-container { 
@@ -132,7 +134,7 @@
             font-size: 5rem; 
         }
         .animal-img { width: 100%; height: 100%; object-fit: contain; }
-        .letter-name { font-size: 5rem; font-weight: bold; color: var(--wood-brown); }
+        .letter-name { font-size: 4.5rem; font-weight: bold; color: var(--wood-brown); margin-left: 10px; }
 
         #overlay {
             position: absolute;
@@ -144,27 +146,27 @@
             justify-content: center;
             align-items: center;
             z-index: 100;
-            padding: 20px;
+            padding: 30px;
         }
 
         .btn-forest {
             font-family: var(--text-serif);
             background: var(--forest-green);
             color: white;
-            padding: 20px 40px;
+            padding: 18px 40px;
             border-radius: 60px;
             font-size: 2rem;
             border: none;
             cursor: pointer;
             box-shadow: 0 8px 0 var(--wood-brown);
             font-weight: bold;
-            margin: 10px;
-            min-width: 400px;
+            margin: 12px;
+            min-width: 450px;
         }
 
-        .rank-table { width: 100%; border-collapse: collapse; font-size: 1.5rem; }
+        .rank-table { width: 100%; border-collapse: collapse; font-size: 1.6rem; }
         .rank-table th { background: var(--leaf-green); color: white; padding: 15px; }
-        .rank-table td { padding: 10px; border-bottom: 1px solid #ddd; text-align: center; }
+        .rank-table td { padding: 12px; border-bottom: 1px solid #ddd; text-align: center; }
     </style>
 </head>
 <body>
@@ -197,15 +199,15 @@
         </div>
 
         <div id="level-view" style="display: none; flex-direction: column; align-items: center; width: 100%;">
-            <h2 style="font-size: 3rem; margin-bottom: 20px;">選擇難度等級</h2>
+            <h2 style="font-size: 3.5rem; margin-bottom: 25px;">選擇難度等級</h2>
             <div id="level-buttons" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;"></div>
             <button class="btn-forest" style="background: #999; margin-top: 30px;" onclick="goBackToMode()">返回主選單</button>
         </div>
 
         <div id="result-view" style="display: none; width: 100%; text-align: center; flex-direction: column; align-items: center;">
             <h2 style="font-size: 4rem; color: var(--forest-green);">完成挑戰！</h2>
-            <p id="result-text" style="font-size: 2.5rem;"></p>
-            <input type="text" id="playerNameInput" placeholder="輸入名字" maxlength="10" style="padding: 15px; border-radius: 30px; font-size: 1.5rem; width: 500px; text-align: center; margin-bottom: 20px;">
+            <p id="result-text" style="font-size: 2.8rem;"></p>
+            <input type="text" id="playerNameInput" placeholder="輸入名字" maxlength="10" style="padding: 15px; border-radius: 35px; font-size: 1.8rem; width: 500px; text-align: center; margin-bottom: 25px;">
             <div style="display: flex; gap: 20px;">
                 <button class="btn-forest" style="min-width: 250px;" onclick="submitAndRestart()">再玩一次</button>
                 <button class="btn-forest" style="min-width: 250px; background: var(--leaf-green);" onclick="submitAndGoHome()">回首頁</button>
@@ -213,8 +215,8 @@
         </div>
 
         <div id="rank-view" style="display: none; width: 100%; flex-direction: column; align-items: center;">
-            <h2 style="font-size: 3rem;">🏆 排行榜</h2>
-            <div style="width: 90%; background: white; border-radius: 20px; max-height: 50vh; overflow: auto; margin-bottom: 20px;">
+            <h2 style="font-size: 3.5rem;">🏆 排行榜</h2>
+            <div style="width: 90%; background: white; border-radius: 20px; overflow: auto; margin-bottom: 20px; max-height: 50vh;">
                 <table class="rank-table">
                     <thead><tr><th>排名</th><th>名稱</th><th>模式</th><th>得分</th><th>時間</th></tr></thead>
                     <tbody id="rank-body"></tbody>
@@ -242,7 +244,8 @@
     function resizeCanvas() {
         canvas.width = wrapper.clientWidth;
         canvas.height = wrapper.clientHeight;
-        s = canvas.height / 8;
+        // 修改：縮小 s (線間距)，將垂直空間縮窄 30% 以上
+        s = canvas.height / 11; 
         drawScene();
     }
 
@@ -289,38 +292,46 @@
         const modeConf = config[currentMode];
         const colors = ["#FF0000", "#FFA500", "#FFD700", "#008000", "#800080"];
         
-        const staffMidY = canvas.height / 2 + (canvas.height * 0.05); 
+        // 譜面中心定位
+        const staffMidY = canvas.height / 2;
         const staffTotalHeight = 4 * s;
         const staffTopY = staffMidY - staffTotalHeight / 2;
         
-        for (let i = 0; i < 5; i++) { // 修正：畫足五線，避免等級低時畫面太空
+        // 繪製五線譜
+        for (let i = 0; i < 5; i++) {
             const y = staffTopY + (4 - i) * s; 
-            ctx.strokeStyle = (i < curLv) ? colors[i] : "#DDD";
-            ctx.lineWidth = Math.max(6, s / 15);
+            ctx.strokeStyle = colors[i] || "#333";
+            ctx.lineWidth = Math.max(4, s / 10); // 略微縮減線寬
             ctx.beginPath();
             ctx.moveTo(canvas.width * 0.1, y);
             ctx.lineTo(canvas.width * 0.9, y);
             ctx.stroke();
         }
 
+        // 譜號位置與縮放
         ctx.fillStyle = "#111";
-        ctx.font = `${s * 6}px serif`;
+        ctx.font = `${s * 7}px serif`; // 譜號稍微比線高一點
         ctx.textAlign = "left";
         ctx.textBaseline = "middle";
         const clefY = currentMode === 'treble' ? staffTopY + 2.5 * s : staffTopY + 3 * s;
         ctx.fillText(modeConf.clef, canvas.width * 0.12, clefY);
 
+        // 繪製題目音符
         if (targetNote) {
             const steps = modeConf.steps[targetNote];
             const y = staffTopY + 4 * s - (steps * (s / 2));
             const x = (canvas.width / 2) + (s * 2); 
+            
             ctx.fillStyle = "black";
             ctx.beginPath();
-            ctx.ellipse(x, y, s * 0.6, s * 0.45, -Math.PI / 8, 0, 2 * Math.PI);
+            // 音符寬高隨 s 縮放
+            ctx.ellipse(x, y, s * 0.65, s * 0.48, -Math.PI / 8, 0, 2 * Math.PI);
             ctx.fill();
+            
+            // 加線 (下加線或上加線)
             if (steps <= -2 || steps >= 10) {
                 ctx.strokeStyle = "#000";
-                ctx.lineWidth = Math.max(6, s / 15);
+                ctx.lineWidth = Math.max(4, s / 10);
                 ctx.beginPath();
                 ctx.moveTo(x - s, y); ctx.lineTo(x + s, y);
                 ctx.stroke();
@@ -328,6 +339,7 @@
         }
     }
 
+    // 以下功能邏輯完全不變
     function selectMode(mode) {
         currentMode = mode;
         document.getElementById('mode-view').style.display = 'none';
@@ -337,7 +349,7 @@
         for(let i=1; i<=5; i++) {
             const btn = document.createElement('button');
             btn.className = 'btn-forest';
-            btn.style.minWidth = "200px";
+            btn.style.minWidth = "220px";
             btn.innerText = "LV " + i;
             btn.onclick = () => startGame(i);
             btnContainer.appendChild(btn);
@@ -378,13 +390,13 @@
         let others = allLetters.filter(l => l !== correctLetter).sort(() => Math.random() - 0.5);
         while (choices.length < 3) choices.push(others.pop());
         choices.sort(() => Math.random() - 0.5);
+        
         const area = document.getElementById('answer-area');
         area.innerHTML = '';
         choices.forEach(letter => {
             const btn = document.createElement('button');
             btn.className = 'animal-btn';
             const data = animalData[letter];
-            // 修正：這裡保持左右佈局
             btn.innerHTML = `<div class="img-container"><img src="${data.img}" class="animal-img" onerror="this.style.display='none'; this.parentElement.innerText='${data.emoji}';"></div><div class="letter-name">${letter}</div>`;
             btn.onclick = () => {
                 if (isAnswering) return;
