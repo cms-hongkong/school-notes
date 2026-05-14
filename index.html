@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>卡雅認音大挑戰</title>
+    <title>卡雅認音大挑戰 - 升級版</title>
     <style>
         :root {
             --forest-green: #1B4332;
@@ -48,8 +48,8 @@
             gap: 10px;
         }
 
-        .in-game-title { font-size: 2.8rem; margin-bottom: 5px; }
-        .main-menu-title { font-size: 7rem; margin-bottom: 30px; }
+        .in-game-title { font-size: 2.5rem; margin-bottom: 5px; }
+        .main-menu-title { font-size: 6rem; margin-bottom: 30px; }
 
         .art-title span {
             display: inline-block;
@@ -93,11 +93,7 @@
             overflow: hidden;
         }
 
-        canvas {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
+        canvas { width: 100%; height: 100%; display: block; }
 
         #answer-area {
             display: flex;
@@ -113,38 +109,35 @@
             border: 5px solid var(--wood-brown);
             border-radius: 30px;
             padding: 10px 25px;
-            width: 280px;
-            height: 140px;
+            width: 260px;
+            height: 130px;
             cursor: pointer;
             box-shadow: 0 10px 0 var(--wood-brown);
             display: flex;
             flex-direction: row;
             align-items: center;
             justify-content: space-between;
+            transition: transform 0.1s;
         }
 
+        .animal-btn:active { transform: translateY(5px); box-shadow: 0 5px 0 var(--wood-brown); }
+
         .img-container { 
-            width: 100px; 
-            height: 100px; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            font-size: 5rem; 
+            width: 90px; height: 90px; 
+            display: flex; justify-content: center; align-items: center; 
+            font-size: 4.5rem; 
         }
         .animal-img { width: 100%; height: 100%; object-fit: contain; }
-        .letter-name { font-size: 4.5rem; font-weight: bold; color: var(--wood-brown); margin-left: 10px; }
+        .letter-name { font-size: 4rem; font-weight: bold; color: var(--wood-brown); }
 
         #overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(255, 255, 255, 0.98);
             border-radius: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            padding: 30px;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            z-index: 100; padding: 30px;
         }
 
         .btn-forest {
@@ -158,13 +151,13 @@
             cursor: pointer;
             box-shadow: 0 8px 0 var(--wood-brown);
             font-weight: bold;
-            margin: 12px;
-            min-width: 450px;
+            margin: 10px;
+            min-width: 400px;
         }
 
-        .rank-table { width: 100%; border-collapse: collapse; font-size: 1.6rem; }
-        .rank-table th { background: var(--leaf-green); color: white; padding: 15px; }
-        .rank-table td { padding: 12px; border-bottom: 1px solid #ddd; text-align: center; }
+        .rank-table { width: 100%; border-collapse: collapse; font-size: 1.4rem; }
+        .rank-table th { background: var(--leaf-green); color: white; padding: 12px; }
+        .rank-table td { padding: 10px; border-bottom: 1px solid #ddd; text-align: center; }
     </style>
 </head>
 <body>
@@ -197,24 +190,24 @@
         </div>
 
         <div id="level-view" style="display: none; flex-direction: column; align-items: center; width: 100%;">
-            <h2 style="font-size: 3.5rem; margin-bottom: 25px;">選擇難度等級</h2>
+            <h2 style="font-size: 3rem; margin-bottom: 20px;">選擇難度等級</h2>
             <div id="level-buttons" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;"></div>
-            <button class="btn-forest" style="background: #999; margin-top: 30px;" onclick="goBackToMode()">返回主選單</button>
+            <button class="btn-forest" style="background: #999; margin-top: 25px;" onclick="goBackToMode()">返回主選單</button>
         </div>
 
         <div id="result-view" style="display: none; width: 100%; text-align: center; flex-direction: column; align-items: center;">
-            <h2 style="font-size: 4rem; color: var(--forest-green);">完成挑戰！</h2>
-            <p id="result-text" style="font-size: 2.8rem;"></p>
-            <input type="text" id="playerNameInput" placeholder="輸入名字" maxlength="10" style="padding: 15px; border-radius: 35px; font-size: 1.8rem; width: 500px; text-align: center; margin-bottom: 25px;">
+            <h2 style="font-size: 3.5rem; color: var(--forest-green);">完成挑戰！</h2>
+            <p id="result-text" style="font-size: 2.5rem;"></p>
+            <input type="text" id="playerNameInput" placeholder="輸入名字" maxlength="10" style="padding: 15px; border-radius: 35px; font-size: 1.8rem; width: 400px; text-align: center; margin-bottom: 20px; border: 3px solid var(--leaf-green);">
             <div style="display: flex; gap: 20px;">
-                <button class="btn-forest" style="min-width: 250px;" onclick="submitAndRestart()">再玩一次</button>
-                <button class="btn-forest" style="min-width: 250px; background: var(--leaf-green);" onclick="submitAndGoHome()">回首頁</button>
+                <button class="btn-forest" style="min-width: 200px;" onclick="submitAndRestart()">再玩一次</button>
+                <button class="btn-forest" style="min-width: 200px; background: var(--leaf-green);" onclick="submitAndGoHome()">回首頁</button>
             </div>
         </div>
 
         <div id="rank-view" style="display: none; width: 100%; flex-direction: column; align-items: center;">
-            <h2 style="font-size: 3.5rem;">🏆 排行榜</h2>
-            <div style="width: 90%; background: white; border-radius: 20px; overflow: auto; margin-bottom: 20px; max-height: 50vh;">
+            <h2 style="font-size: 3rem;">🏆 排行榜</h2>
+            <div style="width: 90%; background: white; border-radius: 20px; overflow: auto; margin-bottom: 20px; max-height: 50vh; border: 5px solid var(--sand-light);">
                 <table class="rank-table">
                     <thead><tr><th>排名</th><th>名稱</th><th>模式</th><th>得分</th><th>時間</th></tr></thead>
                     <tbody id="rank-body"></tbody>
@@ -239,15 +232,6 @@
     let startTime, isAnswering = false;
     let s = 0; 
 
-    function resizeCanvas() {
-        canvas.width = wrapper.clientWidth;
-        canvas.height = wrapper.clientHeight;
-        s = canvas.height / 11; 
-        drawScene();
-    }
-
-    window.addEventListener('resize', resizeCanvas);
-
     const config = {
         treble: {
             clef: "𝄞",
@@ -263,13 +247,17 @@
         bass: {
             clef: "𝄢",
             levels: [
-                { notes: ["C4", "B3", "A3"] },
-                { notes: ["C4", "B3", "A3", "G3", "F3"] },
-                { notes: ["C4", "B3", "A3", "G3", "F3", "E3", "D3"] },
-                { notes: ["C4", "B3", "A3", "G3", "F3", "E3", "D3", "C3", "B2"] },
-                { notes: ["C4", "B3", "A3", "G3", "F3", "E3", "D3", "C3", "B2", "A2", "G2", "F2", "E2"] }
+                { notes: ["C4", "B3", "A3"] }, // Lv 1: 頂線點亮
+                { notes: ["C4", "B3", "A3", "G3", "F3"] }, // Lv 2: 頂二線
+                { notes: ["C4", "B3", "A3", "G3", "F3", "E3", "D3"] }, // Lv 3: 頂三線
+                { notes: ["C4", "B3", "A3", "G3", "F3", "E3", "D3", "C3", "B2"] }, // Lv 4: 頂四線
+                { notes: ["C4", "B3", "A3", "G3", "F3", "E3", "D3", "C3", "B2", "A2", "G2", "F2", "E2"] } // Lv 5: 全亮 + 下加線
             ],
-            steps: { "C4": -2, "B3": -1, "A3": 0, "G3": 1, "F3": 2, "E3": 3, "D3": 4, "C3": 5, "B2": 6, "A2": 7, "G2": 8, "F2": 9, "E2": 10 }
+            // 以低音譜第一線(最下線) G2 為基準 0
+            steps: { 
+                "E2": -2, "F2": -1, "G2": 0, "A2": 1, "B2": 2, "C3": 3, 
+                "D3": 4, "E3": 5, "F3": 6, "G3": 7, "A3": 8, "B3": 9, "C4": 10 
+            }
         }
     };
 
@@ -280,6 +268,15 @@
         'B': { img: 'bear-h.PNG', emoji: '🐻' }
     };
 
+    function resizeCanvas() {
+        canvas.width = wrapper.clientWidth;
+        canvas.height = wrapper.clientHeight;
+        s = canvas.height / 11; 
+        drawScene();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+
     function drawScene() {
         if (!s) return;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -289,15 +286,18 @@
         const staffMidY = canvas.height / 2;
         const staffTotalHeight = 4 * s;
         const staffTopY = staffMidY - staffTotalHeight / 2;
-        
+
+        // 繪製五條線 (i=0 是最底線, i=4 是最頂線)
         for (let i = 0; i < 5; i++) {
             const y = staffTopY + (4 - i) * s; 
-            
             let isActive = false;
+
             if (currentMode === 'treble') {
                 if (i < curLv) isActive = true;
             } else {
-                // 低音模式：由上而下逐條點亮 (i=4 是頂線，i=3 是第二條...)
+                // 低音模式：由頂線向下點亮
+                // Lv 1: 僅點亮 i=4 (頂線)
+                // Lv 2: 點亮 i=4, 3
                 if ((4 - i) < curLv) isActive = true;
             }
 
@@ -309,23 +309,26 @@
             ctx.stroke();
         }
 
+        // 繪製譜號
         ctx.fillStyle = "#111";
         ctx.font = `${s * 4.9}px serif`; 
         ctx.textAlign = "left";
         ctx.textBaseline = "middle";
-        
-        // 低音譜號位置再次下移 (在之前 0.2s 基礎上再移 15%，約 0.35s)
         const clefY = currentMode === 'treble' 
             ? staffTopY + 2.3 * s 
             : staffTopY + (2 * s) + (s * 0.35); 
         ctx.fillText(modeConf.clef, canvas.width * 0.12, clefY);
 
+        // 繪製音符
         if (targetNote) {
             const steps = modeConf.steps[targetNote];
-            // Y 座標計算：staffTopY + 4*s 是底線 (i=0)，- steps*(s/2) 往上移音程
-            // C4 (step -2) 在底線下方 -(-2)*s/2 = +1s，即底線下加一線 (Treble模式邏輯，但在Bass下是上加一線)
-            // 修正 Bass 顯示：在 Bass 坐標系中，staffTopY 是頂線 (i=4)，staffTopY + 4*s 是底線
-            const y = staffTopY + 4 * s - (steps * (s / 2));
+            let y;
+            if (currentMode === 'treble') {
+                y = staffTopY + 4 * s - (steps * (s / 2));
+            } else {
+                // 低音譜號以 G2 (底部線) 為基準向上計算
+                y = staffTopY + 4 * s - (steps * (s / 2));
+            }
             const x = (canvas.width / 2) + (s * 2); 
             
             ctx.fillStyle = "black";
@@ -333,8 +336,8 @@
             ctx.ellipse(x, y, s * 0.65, s * 0.48, -Math.PI / 8, 0, 2 * Math.PI);
             ctx.fill();
             
-            // 繪製加線：當 steps <= -2 (上加線) 或 steps >= 10 (下加線)
-            if (steps <= -2 || steps >= 10) {
+            // 繪製加線 (上加一線 C4 或 下加一線 E2)
+            if (steps >= 10 || steps <= -2) {
                 ctx.strokeStyle = "#000";
                 ctx.lineWidth = Math.max(4, s / 10);
                 ctx.beginPath();
@@ -353,7 +356,7 @@
         for(let i=1; i<=5; i++) {
             const btn = document.createElement('button');
             btn.className = 'btn-forest';
-            btn.style.minWidth = "220px";
+            btn.style.minWidth = "180px";
             btn.innerText = "LV " + i;
             btn.onclick = () => startGame(i);
             btnContainer.appendChild(btn);
@@ -410,7 +413,11 @@
                 } else {
                     btn.style.background = "#FFB3B3";
                 }
-                setTimeout(() => { questionsLeft--; if (questionsLeft > 0) nextQuestion(); else showResult(); }, 600);
+                setTimeout(() => { 
+                    questionsLeft--; 
+                    if (questionsLeft > 0) nextQuestion(); 
+                    else showResult(); 
+                }, 600);
             };
             area.appendChild(btn);
         });
