@@ -293,9 +293,20 @@
         const staffTotalHeight = 4 * s;
         const staffTopY = staffMidY - staffTotalHeight / 2;
         
+        // 繪製五線譜邏輯更新
         for (let i = 0; i < 5; i++) {
             const y = staffTopY + (4 - i) * s; 
-            ctx.strokeStyle = colors[i] || "#333";
+            
+            let isActive = false;
+            if (currentMode === 'treble') {
+                // 高音模式：從下往上算 (i=0 是底線)
+                if (i < curLv) isActive = true;
+            } else {
+                // 低音模式：從上往下算 (i=4 是頂線)
+                if ((4 - i) < curLv) isActive = true;
+            }
+
+            ctx.strokeStyle = isActive ? (colors[i] || "#333") : "#E0E0E0";
             ctx.lineWidth = Math.max(4, s / 10);
             ctx.beginPath();
             ctx.moveTo(canvas.width * 0.1, y);
@@ -304,13 +315,14 @@
         }
 
         ctx.fillStyle = "#111";
-        // 修改點：譜號字體大小倍率從 7 縮減至 4.9 (縮細 30%)
         ctx.font = `${s * 4.9}px serif`; 
         ctx.textAlign = "left";
         ctx.textBaseline = "middle";
         
-        // 微調譜號位置
-        const clefY = currentMode === 'treble' ? staffTopY + 2.3 * s : staffTopY + 2 * s;
+        // 低音譜號移低 20%：原位置調降 (s * 0.2 左右)
+        const clefY = currentMode === 'treble' 
+            ? staffTopY + 2.3 * s 
+            : staffTopY + (2 * s) + (s * 0.2); // 低音譜號位置優化
         ctx.fillText(modeConf.clef, canvas.width * 0.12, clefY);
 
         if (targetNote) {
