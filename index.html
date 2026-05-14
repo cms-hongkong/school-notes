@@ -263,15 +263,16 @@
         bass: {
             clef: "𝄢",
             levels: [
-                { notes: ["E2", "F2", "G2"] }, 
-                { notes: ["E2", "F2", "G2", "A2", "B2"] }, 
-                { notes: ["E2", "F2", "G2", "A2", "B2", "C3", "D3"] }, 
-                { notes: ["E2", "F2", "G2", "A2", "B2", "C3", "D3", "E3", "F3"] }, 
-                { notes: ["E2", "F2", "G2", "A2", "B2", "C3", "D3", "E3", "F3", "G3", "A3", "B3", "C4"] } 
+                { notes: ["C4", "B3", "A3"] }, 
+                { notes: ["C4", "B3", "A3", "G3", "F3"] }, 
+                { notes: ["C4", "B3", "A3", "G3", "F3", "E3", "D3"] }, 
+                { notes: ["C4", "B3", "A3", "G3", "F3", "E3", "D3", "C3", "B2"] }, 
+                { notes: ["C4", "B3", "A3", "G3", "F3", "E3", "D3", "C3", "B2", "A2", "G2", "F2", "E2"] } 
             ],
             steps: { 
-                "E2": -2, "F2": -1, "G2": 0, "A2": 1, "B2": 2, "C3": 3, "D3": 4, 
-                "E3": 5, "F3": 6, "G3": 7, "A3": 8, "B3": 9, "C4": 10 
+                // 由上而下呈示：C4在最高(+1線), B3在第五線(最頂)
+                "C4": 10, "B3": 8, "A3": 7, "G3": 6, "F3": 5, "E3": 4, "D3": 3, 
+                "C3": 2, "B2": 1, "A2": 0, "G2": -1, "F2": -2, "E2": -4 
             }
         }
     };
@@ -293,16 +294,14 @@
         const staffTotalHeight = 4 * s;
         const staffTopY = staffMidY - staffTotalHeight / 2;
         
-        // 繪製五線譜邏輯更新
         for (let i = 0; i < 5; i++) {
             const y = staffTopY + (4 - i) * s; 
             
             let isActive = false;
             if (currentMode === 'treble') {
-                // 高音模式：從下往上算 (i=0 是底線)
                 if (i < curLv) isActive = true;
             } else {
-                // 低音模式：從上往下算 (i=4 是頂線)
+                // 低音模式：由上往下的線顯示 (i=4 是最頂線)
                 if ((4 - i) < curLv) isActive = true;
             }
 
@@ -319,14 +318,15 @@
         ctx.textAlign = "left";
         ctx.textBaseline = "middle";
         
-        // 低音譜號移低 20%：原位置調降 (s * 0.2 左右)
+        // 低音譜號再移低 15% (原基礎下再 + s*0.15)
         const clefY = currentMode === 'treble' 
             ? staffTopY + 2.3 * s 
-            : staffTopY + (2 * s) + (s * 0.2); // 低音譜號位置優化
+            : staffTopY + (2 * s) + (s * 0.35); 
         ctx.fillText(modeConf.clef, canvas.width * 0.12, clefY);
 
         if (targetNote) {
             const steps = modeConf.steps[targetNote];
+            // Y軸計算：staffTopY + 4*s 是底線，所以向上減
             const y = staffTopY + 4 * s - (steps * (s / 2));
             const x = (canvas.width / 2) + (s * 2); 
             
@@ -335,7 +335,10 @@
             ctx.ellipse(x, y, s * 0.65, s * 0.48, -Math.PI / 8, 0, 2 * Math.PI);
             ctx.fill();
             
-            if (steps <= -2 || steps >= 10) {
+            // 加線處理：
+            // 高音下加線(steps <= -2), 上加線(steps >= 10)
+            // 低音上加線(steps >= 10), 下加線(steps <= -4)
+            if (steps <= -2 || steps >= 10 || (currentMode === 'bass' && steps <= -4)) {
                 ctx.strokeStyle = "#000";
                 ctx.lineWidth = Math.max(4, s / 10);
                 ctx.beginPath();
